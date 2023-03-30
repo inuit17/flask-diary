@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% block content %}
+<!-- 질문 등록 -->
+<div class="container">
+    <h5 class="my-3 border-bottom pb-2">기록하기</h5>
+    <form method="post" class="post-form my-3">
+        {{ form.csrf_token }}
+        <!-- 오류표시 Start -->
+        {% if form.errors %}
+        <div class="alert alert-danger" role="alert">
+            {% for field, errors in form.errors.items() %}
+            <strong>{{ form[field].label }}</strong>
+            <ul>
+                {% for error in errors %}
+                <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+            {% endfor %}
+        </div>
+        {% endif %}
+        <!-- 오류표시 End -->
+        <div class="mb-3">
+            <label for="subject">제목</label>
+            <input type="text" class="form-control" name="subject" id="subject"
+                value="{{ form.subject.data or '' }}">
+        </div>
+        <div class="mb-3">
+            <label for="image">이미지URL</label>
+            <textarea class="form-control" name="image" id="image" rows="2">{{ form.content.data or '' }}</textarea>
+        </div>
+        <div class="mb-3">
+            <label for="content">내용</label>
+            <textarea class="form-control" name="content" id="content" rows="10">{{ form.content.data or '' }}</textarea>
+        </div>
+        <div class="mb-3">
+            <label for="content">감정 단어</label>
+            <input type="text" class="form-control" name="hash" id="hash" value="{{ form.content.data or '' }}"> ###여기 input type 뭐라고 하지..일단은 text로 처리했다
+        </div>
+
+<!--        {{ form.image.label }}-->
+<!--        {{ form.image(class="form-control") }}-->
+
+<!--        {{ form.content.label }}-->
+<!--        {{ form.content(class="form-control") }}-->
+
+<!--        {{ form.hash.label }}-->
+<!--        {{ form.hash() }}-->
+
+        <button type="submit" class="btn btn-primary">기록하기</button>
+    </form>
+</div>
+{% endblock %}
+

@@ -1,0 +1,76 @@
+<!-- 질문 목록 -->
+{% extends 'base.html' %}
+{% block content %}
+<div class="container my-3">
+    <table class="table">
+        <thead>
+        <tr class="text-center table-dark">
+            <th>번호</th>
+            <th style="width:50%">제목</th>
+            <th>글쓴이</th> # 이거 다른 데로 옮겨야..
+            <th>쓴 날짜</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% if diary_list %}
+        {% for diary in diary_list.items %}
+        <tr class="text-center">
+            <td>{{ diary_list.total - ((diary_list.page-1) * diary_list.per_page) - loop.index0 }}</td>
+            <td class="text-start">
+                <a href="{{ url_for('diary.detail', diary_id=diary.id) }}">{{ diary.subject }}</a>
+            </td>
+            <td>{{ diary.user.username }}</td>  <!-- 글쓴이 추가 -->
+            <td>{{ diary.create_date|datetime }}</td>
+        </tr>
+        {% endfor %}
+        {% else %}
+        <tr>
+            <td colspan="3">아직 등록된 일기가 없어요!</td>
+        </tr>
+        {% endif %}
+        </tbody>
+    </table>
+        <!-- 페이징처리 시작 -->
+    <ul class="pagination justify-content-center">
+        <!-- 이전페이지 -->
+        {% if diary_list.has_prev %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ diary_list.prev_num }}">이전</a>
+        </li>
+        {% else %}
+        <li class="page-item disabled">
+            <a class="page-link" tabindex="-1" aria-disabled="true" href="javascript:void(0)">이전</a>
+        </li>
+        {% endif %}
+        <!-- 페이지번호 -->
+        {% for page_num in diary_list.iter_pages() %}
+        {% if page_num %}
+        {% if page_num != diary_list.page %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ page_num }}">{{ page_num }}</a>
+        </li>
+        {% else %}
+        <li class="page-item active" aria-current="page">
+            <a class="page-link" href="javascript:void(0)">{{ page_num }}</a>
+        </li>
+        {% endif %}
+        {% else %}
+        <li class="disabled">
+            <a class="page-link" href="javascript:void(0)">...</a>
+        </li>
+        {% endif %}
+        {% endfor %}
+        <!-- 다음페이지 -->
+        {% if diary_list.has_next %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ diary_list.next_num }}">다음</a>
+        </li>
+        {% else %}
+        <li class="page-item disabled">
+            <a class="page-link" tabindex="-1" aria-disabled="true" href="javascript:void(0)">다음</a>
+        </li>
+        {% endif %}
+    </ul>
+    <!-- 페이징처리 끝 -->
+<!--    <a href="{{ url_for('diary.create') }}" class="btn btn-primary">기록하기</a>-->
+</div>
